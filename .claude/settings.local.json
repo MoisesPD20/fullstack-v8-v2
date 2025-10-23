@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find . -type f ( -name \"*.jsx\" -o -name \"*.js\" ) -exec sed -i \"s/AuthContext\\.simplified/AuthContext/g\" {} +)",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse -Include *.jsx,*.js | ForEach-Object { (Get-Content $_FullName) -replace ''AuthContext\\.simplified'', ''AuthContext'' | Set-Content $_FullName }\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"./fix-imports.ps1\")",
+      "Bash(copy AuthContext.jsx AuthContext.PREVIOUS.jsx)",
+      "Bash(copy AuthContext.MINIMAL.jsx AuthContext.jsx)",
+      "Bash(git add -A)",
+      "Bash(git add frontend/src/contexts/AuthContext.jsx)",
+      "Bash(git commit -m \"Fix: Replace with ultra-minimal AuthContext (84 lines, zero complex dependencies - eliminates circular deps)\")",
+      "Bash(powershell -Command \"(Get-Content AuthContext.jsx | Measure-Object -Line).Lines\")",
+      "Bash(tree /F /A)",
+      "Bash(dir /S /B)",
+      "Bash(findstr /V \"node_modules .git dist build\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
